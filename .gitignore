@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+.pytest_cache/
+test-results/
+playwright-report/
+.wheels/
+.qa/
+sample-routes.json
+sample-detour.json
+weather-check.json
+*.tsbuildinfo
+fs-assessment-spotter.pdf
