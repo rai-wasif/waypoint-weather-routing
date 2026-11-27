@@ -1096,3 +1096,69 @@ footer {
   color: #8a978f;
   margin-top: 7px;
 }
+
+/* Theme changes only presentation; weather risk colors retain their meaning. */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid #dce4df;
+  border-radius: 8px;
+  background: #f4f6f5;
+  color: #22604a;
+}
+:root[data-theme=dark] {
+  color-scheme: dark;
+  background: #101b19;
+  color: #e2eee8;
+}
+[data-theme=dark] :is(.topbar,.panel,.route-card,.modal,.mode-badge,.swap,.slider-row button,.map-controls button,.theme-toggle) {
+  background: #192824;
+  border-color: #35483f;
+  color: #e2eee8;
+}
+[data-theme=dark] :is(input:not([type=range]),.segmented,thead,.modal-close,.avatar,.count) {
+  background: #12201c;
+  border-color: #35483f;
+  color: #d3e4da;
+}
+[data-theme=dark] input::placeholder { color: #9aafa3; }
+[data-theme=dark] :is(.route-card.selected,.segmented .active,.map-controls button.enabled,.forecast-heading strong) {
+  background: #243e32;
+  color: #b2e6c7;
+  border-color: #70b791;
+}
+[data-theme=dark] :is(.brand-caption,.assessment,.small-label,.eyebrow,.text-button,.page-heading p,.trip-form label,.trip-form label span,.form-note,.route-number,.route-via,.route-meta,.route-meta span:first-child,.route-bottom,.footnote,.map-heading p,.forecast-heading>span,.slider-labels,.map-legend,.legend-note,.checkpoints .section-heading p,th,td,td small,.checkpoint-number,footer,.modal p,.unit) {
+  color: #adbbb2;
+}
+[data-theme=dark] :is(th,td,.map-legend) { border-color: #304238; }
+[data-theme=dark] .recommended { color: #82cda1; }
+[data-theme=dark] .recommendation {
+  background: #21382c;
+  border-color: #35553f;
+}
+[data-theme=dark] .recommendation-icon { background: #2d4935; color: #a1dab0; }
+[data-theme=dark] .recommendation h3 { color: #b3ddbc; }
+[data-theme=dark] :is(.recommendation p,.recommendation .text-button) { color: #b1c5b1; }
+[data-theme=dark] :is(.recommendation.blocked,.error) {
+  background: #3b2525;
+  border-color: #72463f;
+  color: #ffc0ad;
+}
+[data-theme=dark] .map-loading { background: #14241de8; color: #c6e8d0; }
+[data-theme=dark] :is(.map-wrap,.leaflet-container) { background: #192824; }
+/* Filter only the basemap tiles, never route lines, heat cells or markers. */
+[data-theme=dark] .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.78) saturate(.65); }
+[data-theme=dark] :is(.map-label,.leaflet-popup-content-wrapper,.leaflet-popup-tip,.leaflet-bar a,.leaflet-control-attribution) {
+  background: #192824;
+  color: #d3e4da;
+  border-color: #35483f;
+}
+[data-theme=dark] .leaflet-control-attribution a { color: #9ad4bd; }
+[data-theme=dark] .risk-pill { font-weight: 650; }
+[data-theme=dark] :is(.risk-pill,.route-bottom>span[style]) { filter: brightness(1.7); }
+@media(max-width:400px) {
+  .header-right { gap: 8px; }
+  .header-right .text-button { font-size: 12px; gap: 4px; }
+  .topbar { padding: 0 12px; }
+}

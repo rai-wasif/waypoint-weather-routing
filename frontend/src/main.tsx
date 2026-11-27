@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Navigation, Route as RouteIcon, ShieldCheck, Wind, CloudRain, Snowflake, MapPin, ArrowDownUp, Clock3, Weight, Layers, Play, Pause, Info, LoaderCircle, TriangleAlert, Check } from 'lucide-react';
+import { Navigation, Route as RouteIcon, ShieldCheck, Wind, CloudRain, Snowflake, MapPin, ArrowDownUp, Clock3, Weight, Layers, Play, Pause, Info, LoaderCircle, TriangleAlert, Check, Moon, Sun } from 'lucide-react';
 import TripMap from './TripMap';
 import sample from './sample.json';
 import { colors, levels, duration, time, type Plan } from './types';
 import './styles.css';
 const initialDate = () => { const d = new Date(Date.now() + 3600000); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
 function App() {
+    const [dark, setDark] = useState(() => {
+        try { return localStorage.getItem('waypoint-theme') === 'dark'; }
+        catch { return false; }
+    });
+    useEffect(() => {
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        try { localStorage.setItem('waypoint-theme', dark ? 'dark' : 'light'); }
+        catch { /* Theme still works when browser storage is unavailable. */ }
+    }, [dark]);
     const [plan, setPlan] = useState<Plan>(sample as Plan);
     const [selected, setSelected] = useState('0');
     const [origin, setOrigin] = useState('Chicago');
@@ -79,7 +88,7 @@ function App() {
         }
     }
     function showSample() { setPlan(sample as Plan); setSelected('0'); setHour(0); setSubmitted(null); setError(''); setPlaying(false); }
-    return <><header className="topbar"><a href="/" className="brand"><span className="brand-icon"><Navigation size={23} fill="currentColor"/></span>waypoint<span className="brand-divider"/> <span className="brand-caption">A clearer road ahead.</span></a><div className="header-right"><span className="assessment">SPOTTER ASSESSMENT</span><button className="text-button" onClick={() => setMethod(true)}><Info size={16}/> How it works</button><div className="avatar">MB</div></div></header>
+    return <><header className="topbar"><a href="/" className="brand"><span className="brand-icon"><Navigation size={23} fill="currentColor"/></span>waypoint<span className="brand-divider"/> <span className="brand-caption">A clearer road ahead.</span></a><div className="header-right"><span className="assessment">SPOTTER ASSESSMENT</span><button className="text-button" onClick={() => setMethod(true)}><Info size={16}/> How it works</button><button className="theme-toggle" type="button" aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Switch to light mode' : 'Switch to dark mode'} aria-pressed={dark} onClick={() => setDark(value => !value)}>{dark ? <Sun size={18}/> : <Moon size={18}/>}</button><div className="avatar">MB</div></div></header>
     <main><div className="page-heading"><div><div className="eyebrow">WEATHER-AWARE DISPATCH</div><h1>Every mile. A little more informed.</h1><p>Compare your routes. Understand the weather. Choose a better way forward.</p></div><div className="mode-badge"><span className={isSample ? 'sample-dot' : 'live-dot'}/>{isSample ? 'Sample trip' : 'Live forecast'}</div></div>
     <div className="workspace"><aside className="sidebar"><section className="panel trip-form"><div className="section-heading"><h2><RouteIcon size={19}/> Plan your trip</h2><span className="small-label">01 / TRIP DETAILS</span></div><form onSubmit={calculate}>
       <div className="locations"><label htmlFor="origin">Origin</label><div className="input-icon"><MapPin size={17}/><input id="origin" value={origin} onChange={e => setOrigin(e.target.value)} placeholder="Departure city" required minLength={2} maxLength={120}/></div><button type="button" className="swap" aria-label="Swap origin and destination" onClick={() => { setOrigin(destination); setDestination(origin); }}><ArrowDownUp size={15}/></button><label htmlFor="destination">Destination</label><div className="input-icon"><MapPin size={17}/><input id="destination" value={destination} onChange={e => setDestination(e.target.value)} placeholder="Arrival city" required minLength={2} maxLength={120}/></div></div>
