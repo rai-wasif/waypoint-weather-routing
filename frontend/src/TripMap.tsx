@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { colors, time, type Plan } from './types';
+import { colors, levels, duration, time, type Plan } from './types';
 import 'leaflet/dist/leaflet.css';
 function Fit({ plan }: {
     plan: Plan;
@@ -69,7 +69,15 @@ export default function TripMap({ plan, selected, onSelect, hour, heat, points }
     <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'/>
     <Fit plan={plan}/>
     {heat && <ForecastHeat cells={plan.corridor} hour={hour}/>}
-    {[...plan.routes].sort((a, b) => Number(a.id === selected) - Number(b.id === selected)).map(r => <Polyline key={r.id} positions={r.geometry.map(([lng, lat]) => [lat, lng])} pathOptions={{ color: r.id === selected ? '#146e60' : '#7e8e9f', weight: r.id === selected ? 6 : 4, opacity: r.id === selected ? 1 : .65 }} eventHandlers={{ click: () => onSelect(r.id) }}><Popup>{r.name}</Popup></Polyline>)}
+    {[...plan.routes].sort((a, b) => Number(a.id === selected) - Number(b.id === selected)).map(r => <Polyline key={r.id} positions={r.geometry.map(([lng, lat]) => [lat, lng])} pathOptions={{ color: r.id === selected ? '#146e60' : '#7e8e9f', weight: r.id === selected ? 6 : 4, opacity: r.id === selected ? 1 : .65 }} eventHandlers={{ click: () => onSelect(r.id) }}><Popup><strong>{r.name}</strong><br />
+      {Math.round(r.summary.distance_miles)} miles | {duration(r.summary.duration_seconds)}<br />
+      Arrival: {time(r.checkpoints[r.checkpoints.length - 1].eta)} (local)<br />
+      Peak risk: {levels[r.summary.max_risk]}<br />
+      Severe: {r.summary.risk_miles[3].toFixed(1)} mi | High: {r.summary.risk_miles[2].toFixed(1)} mi<br />
+      Average risk: {r.summary.average_risk.toFixed(2)} / 4<br />
+      {r.checkpoints.length} weather checkpoints<br />
+      <strong>{r.summary.blocked ? 'Excluded: No Travel exposure' : plan.recommended_id === r.id ? 'Recommended route' : 'Alternative route'}</strong>
+    </Popup></Polyline>)}
     {points && route.checkpoints.map((p, i) => <CircleMarker key={`${selected}-${i}`} center={[p.lat, p.lng]} radius={6} pathOptions={{ color: 'white', weight: 2, fillColor: colors[p.risk.score], fillOpacity: 1 }}><Popup><strong>Checkpoint {i + 1} · {p.risk.level}</strong><br />Mile {Math.round(p.mile)} · {time(p.eta)}<br />Wind {p.weather.wind.toFixed(1)} mph<br />Rain {p.weather.rain.toFixed(2)} in/hr · Snow {p.weather.snow.toFixed(2)} in/hr</Popup></CircleMarker>)}
     {[plan.origin, plan.destination].map((p, i) => <CircleMarker key={i} center={[p.lat, p.lng]} radius={10} pathOptions={{ color: '#fff', weight: 3, fillColor: '#123c35', fillOpacity: 1 }}><Popup><strong>{i ? 'Destination' : 'Origin'}</strong><br />{p.name}</Popup></CircleMarker>)}
   </MapContainer>;

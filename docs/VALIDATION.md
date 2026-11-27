@@ -34,9 +34,26 @@ For the browser smoke check on Windows, start Django and Vite as described in th
 ## Outstanding submission steps
 
 - Source published to `rai-wasif/waypoint-weather-routing` in separate plan, backend, frontend, and deployment/documentation commits.
-- Deploy React and Django; configure the backend hostname, frontend CORS origin, and frontend API base URL.
-- Repeat a live trip on the hosted application.
+- React deployed to https://waypoint-weather-routing.vercel.app; Django deployed to https://waypoint-api-k856.onrender.com with CORS and API base URL configured.
+- Hosted browser trip verified on November 27, 2026: Live forecast, no application error.
 - Record and share the personal 5–10-minute Loom walkthrough.
 - Submit the three deliverable links through the recruitment form.
 
-No hosted deployment or recruiting submission has been performed.
+The hosted deployment has been verified. The personal Loom recording and recruiting submission remain outstanding.
+
+
+## Assessment requirement review - November 27, 2026
+
+| PDF functionality | Implementation |
+| --- | --- |
+| React + Django; origin, destination, departure, load | React trip form and Django plan endpoint |
+| Three API-generated routes | OSRM alternatives and waypoint detours; actionable error if three distinct routes cannot be found |
+| Weather every 10 / 25 / 50 miles at checkpoint ETA | Road geometry sampling and annotated edge travel times; hourly forecast lookup |
+| Weather and load thresholds | Risk classification with boundary and load tests |
+| Recommendation priority | Severe miles, High miles, distance-weighted average risk, then duration; No Travel excluded |
+| Map routes, checkpoints, risk, ETAs and summaries | Route lines, checkpoint popups, and route summary popups with distance, duration, arrival, risk exposure and recommendation |
+| Corridor heatmap and 0-48h slider | Canvas forecast overlay, 49 hourly frames and playback |
+
+Route summary popup verified by a real browser click. Route selection, modal dismissal, playback and 390px layout also passed; no runtime exceptions. Production build passed. Dark mode toggle and persisted preference verified separately; 14 Django tests passed during the same review.
+
+This records implemented requirements and checks, not a guaranteed evaluator score or exhaustive validation of every possible trip. The corridor overlay is a coarse forecast visualization; public API availability, routability and the documented forecast/distance limits still apply.
